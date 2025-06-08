@@ -14,3 +14,11 @@ install-requirements: #@ Installs all required packages
 .PHONY: run-cli-demo
 run-cli-demo: #@ runs cli demo using gptscript
 	@gptscript cli-demo.gpt
+
+.PHONY: ws-list-ops
+ws-list-ops: #@ lists operation IDs of weather stack APIs in weatherstack.openapi.yaml
+	@grep operationId weatherstack.openapi.yaml
+
+.PHONY: run-api-demo
+run-api-demo: #@ runs api demo using gptscript
+	@gptscript weather-tool.gpt
