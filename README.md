@@ -1,6 +1,8 @@
 # GPTScript Tool Collection
 
-A well-organized collection of GPTScript tools for automation, data processing, and API integrations.
+Collection of GPTScript tools for automation, data processing, and API integrations.
+To practice https://docs.gptscript.ai/.
+Also contains additional tools apart from tools in the gptscript docs.
 
 ## 🚀 Quick Start
 
