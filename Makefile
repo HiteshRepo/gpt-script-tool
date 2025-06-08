@@ -11,9 +11,9 @@ install-requirements: #@ Installs all required packages
 	@ chmod +x ./scripts/install-requirements.sh
 	@ ./scripts/install-requirements.sh
 
-.PHONY: run-cli-demo
-run-cli-demo: #@ runs cli demo using gptscript
-	@gptscript tools/cli/cli-demo.gpt
+.PHONY: run-github-demo
+run-github-demo: #@ runs github tool using gptscript
+	@gptscript tools/github/github.gpt
 
 .PHONY: ws-list-ops
 ws-list-ops: #@ lists operation IDs of weather stack APIs in weatherstack.openapi.yaml

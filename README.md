@@ -11,7 +11,7 @@ Also contains additional tools apart from tools in the gptscript docs.
 make install-requirements
 
 # Run demos
-make run-cli-demo          # GitHub CLI integration
+make run-github-demo       # GitHub CLI integration
 make run-api-demo          # Weather API demo  
 make run-local-files-demo  # Data processing demo
 make run-tweets-workflow   # Twitter summarization
@@ -23,8 +23,8 @@ make help
 ## 📁 Project Structure
 
 ```
-├── tools/                 # GPTScript tools organized by category
-│   ├── cli/              # Command-line integrations
+├── tools/                # GPTScript tools organized by category
+│   ├── github/           # GitHub CLI integrations
 │   ├── data-processing/  # File and data processing
 │   ├── social/           # Social media tools
 │   └── weather/          # Weather and environmental data
@@ -38,7 +38,7 @@ make help
 
 | Category | Tool | Description |
 |----------|------|-------------|
-| **CLI** | cli-demo.gpt | GitHub CLI integration |
+| **Github** | github.gpt | GitHub CLI integration |
 | **Data** | local-files.gpt | Process CSV, JSON, PDF, Excel files |
 | **Data** | context-tool.gpt | Workspace context provider |
 | **Social** | tweets-workflow.gpt | Twitter content summarization |
