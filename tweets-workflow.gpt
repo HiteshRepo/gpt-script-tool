@@ -1,0 +1,41 @@
+Name: summarize-tweets
+Description: Summarize tweets
+Tools: sys.write, summarize-tweet
+
+Always summarize tweets synchronously in the order they appear.
+Never summarize tweets in parallel.
+Write all the summaries for the tweets at the following URLs to `tweets.md`:
+- https://x.com/acornlabs/status/1798063732394000559
+- https://x.com/acornlabs/status/1797998244447900084
+
+
+---
+Name: summarize-tweet
+Description: Returns a brief summary of a tweet in markdown
+Tools: get-hyperlinks, summarize-hyperlink, github.com/gptscript-ai/browser
+Parameters: url: Absolute URL of the tweet to summarize
+
+Return a markdown formatted summary of the tweet at ${url} using the following format:
+
+## <tweet-date> [<tweet-subject>](${url})
+
+Short summary of the tweet.
+
+### References
+
+<list of hyperlinks found in the tweet's text and their respective summaries>
+
+---
+Name: get-hyperlinks
+Description: Returns the list of hyperlinks in a given text
+Parameters: text: Text to extract hyperlinks from
+
+Return the list of hyperlinks found in ${text}. If ${text} contains no hyperlinks, return an empty list.
+
+---
+Name: summarize-hyperlink
+Description: Returns a summary of the page at a given hyperlink URL
+Tools: github.com/gptscript-ai/browser
+Parameters: url: HTTPS URL of a page to summarize
+
+Briefly summarize the page at ${url}.

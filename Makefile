@@ -26,3 +26,7 @@ run-api-demo: #@ runs api demo using gptscript
 .PHONY: run-local-files-demo
 run-local-files-demo: #@ runs local files demo using gptscript
 	@gptscript --workspace=./sample-data local-files.gpt
+
+.PHONY: run-tweets-workflow
+run-tweets-workflow: #@ runs tweets summarizer workflow using gptscript
+	@gptscript tweets-workflow.gpt
