@@ -22,3 +22,7 @@ ws-list-ops: #@ lists operation IDs of weather stack APIs in weatherstack.openap
 .PHONY: run-api-demo
 run-api-demo: #@ runs api demo using gptscript
 	@gptscript weather-tool.gpt
+
+.PHONY: run-local-files-demo
+run-local-files-demo: #@ runs local files demo using gptscript
+	@gptscript --workspace=./sample-data local-files.gpt
