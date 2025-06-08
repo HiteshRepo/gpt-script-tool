@@ -1,0 +1,935 @@
+# Spec generated using NotebookLM using link https://weatherstack.com/documentation
+
+openapi: 3.0.0
+info:
+  title: Weatherstack API
+  description: API documentation for the weatherstack API, providing access to real-time, historical, and forecast weather data.
+  version: 1.0.0
+servers:
+  - url: https://api.weatherstack.com/
+    description: Base URL for weatherstack API requests. HTTPS encryption is available on all plans [1].
+security:
+  - apiKeyAuth: []
+
+paths:
+  /current:
+    get:
+      summary: Current Weather
+      operationId: getCurrentWeather
+      description: Query the weatherstack API for real-time weather data for a location [2]. Available on All plans [2]. Bulk location requests are possible depending on subscription [2].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/units'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentWeatherResponse'
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /historical:
+    get:
+      summary: Historical Weather
+      operationId: getHistoricalWeather
+      description: Look up historical weather data back to 2015 [3]. Available on Standard Plan and higher [3]. Supports single or multiple dates and locations [3, 4].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/historical_date'
+        - $ref: '#/components/parameters/hourly'
+        - $ref: '#/components/parameters/interval'
+        - $ref: '#/components/parameters/units'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoricalWeatherResponse'
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Note: Historical Time-Series uses the same /historical endpoint but different parameters [5]
+  /historical-timeseries:
+    get:
+      summary: Historical Time-Series
+      operationId: getHistoricalTimeSeries
+      description: Access historical weather data for a time-series by specifying start and end dates [5]. Available on Standard Plan and higher [5]. Maximum timeframe of 60 days [6].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/historical_date_start'
+        - $ref: '#/components/parameters/historical_date_end'
+        - $ref: '#/components/parameters/hourly'
+        - $ref: '#/components/parameters/interval'
+        - $ref: '#/components/parameters/units'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoricalWeatherResponse' # Response structure is similar to Historical Weather [6]
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /forecast:
+    get:
+      summary: Weather Forecast
+      operationId: getWeatherForecast
+      description: Return weather forecast data for up to 14 days into the future [6]. Available on Professional Plan and higher [6].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/query'
+        - $ref: '#/components/parameters/forecast_days'
+        - $ref: '#/components/parameters/hourly'
+        - $ref: '#/components/parameters/interval'
+        - $ref: '#/components/parameters/units'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherForecastResponse'
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /marine:
+    get:
+      summary: Marine Weather Forecast
+      operationId: getMarineWeather
+      description: Access today's live marine/sailing weather forecast for a given longitude and latitude, as well as up to 7 days of forecast [7]. Available on Standard Plan and higher [7].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/latitude'
+        - $ref: '#/components/parameters/longitude'
+        - $ref: '#/components/parameters/tide'
+        - $ref: '#/components/parameters/hourly'
+        - $ref: '#/components/parameters/interval'
+        - $ref: '#/components/parameters/units'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarineWeatherResponse' # Example response structure is similar to forecast [8]
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /past-marine:
+    get:
+      summary: Historical Marine Weather
+      operationId: getHistoricalMarineWeather
+      description: Access historical marine data since 1st Jan, 2015 for a given latitude and longitude, as well as tide data [9]. Available on Standard Plan and higher [9]. The historical marine time series can accept a maximum timeframe of 35 days [10].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/latitude'
+        - $ref: '#/components/parameters/longitude'
+        - $ref: '#/components/parameters/historical_date_start'
+        - $ref: '#/components/parameters/historical_date_end_marine'
+        - $ref: '#/components/parameters/tide'
+        - $ref: '#/components/parameters/hourly'
+        - $ref: '#/components/parameters/interval'
+        - $ref: '#/components/parameters/units'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoricalMarineResponse' # Example response structure uses "historical" key [11]
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /autocomplete:
+    get:
+      summary: Location Lookup/Autocomplete
+      operationId: getLocationAutocomplete
+      description: Pinpoint one or more specific locations and their identifying response objects [12]. Available on Standard Plan and higher [12]. Useful for getting lat/lon for use in other endpoints [13].
+      parameters:
+        - $ref: '#/components/parameters/access_key'
+        - $ref: '#/components/parameters/autocomplete_query'
+        - $ref: '#/components/parameters/callback'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationAutocompleteResponse'
+        default:
+          description: API error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: access_key
+      description: Your unique API access key, found in your account dashboard after registration [14]. Keep it safe and do not expose it publicly [1].
+
+  parameters:
+    access_key:
+      name: access_key
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Your unique API access key, found in your account dashboard after registration [14].
+
+    query:
+      name: query
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Use this parameter to pass a single location or multiple semicolon-separated location identifiers to the API [3, 15]. Supported identifiers include Location Name (e.g., "New York"), UK/Canada/US ZIP Code (e.g., "99501"), Coordinates (Lat/Lon, e.g., "40.7831,-73.9712"), IP Address (e.g., "153.65.8.20"), or Auto-Fetch IP ("fetch:ip") [16]. Bulk queries require Professional Plan or higher [17]. Each location in a bulk query counts towards request volume [3].
+
+    autocomplete_query:
+      name: query
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Your location search/autocomplete query in free-text [18].
+
+    historical_date:
+      name: historical_date
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+      description: Use this parameter to pass one historical date or multiple semicolon-separated dates (Example: 2015-01-21 or 2015-01-21;2015-01-22) [4]. Date must be later than July 2008 [3].
+
+    historical_date_start:
+      name: historical_date_start
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+      description: Use this parameter to pass a start date for the historical time-series request in yyyy-MM-dd format [19, 20].
+
+    historical_date_end:
+      name: historical_date_end
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+      description: Use this parameter to pass an end date for the historical time-series request in yyyy-MM-dd format [19]. Max date range is 60 days for historical time-series [6].
+
+    historical_date_end_marine:
+      name: historical_date_end
+      in: query
+      required: false # Optional for marine [20]
+      schema:
+        type: string
+        format: date
+      description: To retrieve marine weather between two dates, use this parameter to specify the ending date in yyyy-MM-dd format [20]. Important: must have the same month and year as historical_date_start [20]. Max date range is 35 days for historical marine time series [10].
+
+    forecast_days:
+      name: forecast_days
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 14
+      description: Specify the number of days for which the API returns forecast data. Default is 7 or 14 depending on your subscription [21].
+
+    hourly:
+      name: hourly
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum: [22]
+      description: Set to 1 (on) or 0 (off) to return weather data split hourly. Default is 0 (off) [4, 19, 21, 23, 24].
+
+    interval:
+      name: interval
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum: [2, 14, 22, 25, 26]
+      description: If hourly data is enabled (`hourly=1`), define the interval. Default is 3 hourly [23, 24, 26-28].
+
+    units:
+      name: units
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [m, s, f]
+      description: Pass one of the unit identifiers. 'm' for Metric (Default), 's' for Scientific, 'f' for Fahrenheit [15, 29, 30]. Affects temperature, wind speed/visibility, pressure, precip, total snow [29, 30].
+
+    language:
+      name: language
+      in: query
+      required: false
+      schema:
+        type: string
+        # Full list of supported languages is provided in the source [31],
+        # but listing all 40 codes here is lengthy.
+        # Example enum for clarity:
+        # enum: [en, ar, bn, bg, zh, zh_tw, cs, da, nl, fi, fr, de, el, hi, hu, it, ja, jv, ko, zh_cmn, mr, pl, pt, pa, ro, ru, sr, si, sk, es, sv, ta, te, tr, uk, ur, vi, zh_wuu, zh_hsn, zh_yue, zu]
+      description: Specify your preferred API response language using its 2-letter ISO-code [15, 31]. Default is English [15, 31]. Available on Professional Plan and higher [31].
+
+    callback:
+      name: callback
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Specify a JSONP callback function name to wrap your API response in [15, 32].
+
+    latitude:
+      name: latitude
+      in: query
+      required: true
+      schema:
+        type: number
+        format: float
+      description: Latitude value in degrees (e.g., 41.9981) [7, 20].
+
+    longitude:
+      name: longitude
+      in: query
+      required: true
+      schema:
+        type: number
+        format: float
+      description: Longitude value in degrees (e.g., 21.4254) [7, 20].
+
+    tide:
+      name: tide
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [yes, no]
+      description: Return tide data information if available. Valid values are 'yes' or 'no' (default) [23, 24].
+
+  schemas:
+    ErrorResponse:
+      type: object
+      description: API error response object [1].
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful [33].
+        error:
+          type: object
+          description: Details about the error that occurred [1].
+          properties:
+            code:
+              type: integer
+              description: Error code [1].
+            type:
+              type: string
+              description: Error type (e.g., "usage_limit_reached") [33].
+            info:
+              type: string
+              description: Information containing details about the error (e.g., "Your monthly API request volume has been reached. Please upgrade your plan.") [1, 33].
+      required:
+        - success
+        - error
+
+    RequestObject:
+      type: object
+      description: Information about the API request [34].
+      properties:
+        type:
+          type: string
+          description: The type of location lookup used for this request [34]. Possible values: City, LatLon, IP, Zipcode [34].
+        query:
+          type: string
+          description: The exact location identifier query used for this request [34].
+        language:
+          type: string
+          description: The ISO-Code of the language used for this request [34].
+        unit:
+          type: string
+          description: The unit identifier used for this request ('m', 's', or 'f') [34].
+        results:
+          type: integer
+          description: The number of results found (for autocomplete endpoint) [13].
+
+    LocationObject:
+      type: object
+      description: Information about the location [34].
+      properties:
+        name:
+          type: string
+          description: The name of the location used for this request [34].
+        country:
+          type: string
+          description: The country name associated with the location [34].
+        region:
+          type: string
+          description: The region name associated with the location [34].
+        lat:
+          type: string # Source uses string for lat/lon in example [13, 35]
+          description: The latitude coordinate associated with the location [34].
+        lon:
+          type: string # Source uses string for lat/lon in example [13, 35]
+          description: The longitude coordinate associated with the location [34].
+        timezone_id:
+          type: string
+          description: The timezone ID associated with the location (Example: America/New_York) [34].
+        localtime:
+          type: string
+          description: The local time of the location (Example: 2019-09-07 08:14) [34].
+        localtime_epoch:
+          type: integer
+          description: The local time as UNIX timestamp (Example: 1567844040) [34].
+        utc_offset:
+          type: string # Source uses string "-4.0" in example [35]
+          description: The UTC offset (in hours) of the timezone [34].
+
+    AstroObject:
+      type: object
+      description: Astronomic weather details [10, 34, 36-38].
+      properties:
+        sunrise:
+          type: string
+          description: Local sunrise time (hh:mm am/pm) [10, 34, 36-38].
+        sunset:
+          type: string
+          description: Local sunset time (hh:mm am/pm) [10, 34, 36-38].
+        moonrise:
+          type: string
+          description: Local moonrise time (hh:mm am/pm) [10, 34, 36-38].
+        moonset:
+          type: string
+          description: Local moonset time (hh:mm am/pm) [10, 34, 36-38].
+        moon_phase:
+          type: string
+          description: Local moon phase [10, 34, 36-38]. Possible values include New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Full Moon, Waning Gibbous, Last Quarter, Waning Crescent [39-43].
+        moon_illumination:
+          type: integer
+          description: Moon illumination level as percentage [39-43].
+
+    AirQualityObject:
+      type: object
+      description: Air quality details [39, 41].
+      properties:
+        co:
+          type: string # Source example uses string "468.05" [35]
+          description: Carbon Monoxide (μg/m3) [39, 41].
+        no2:
+          type: string # Source example uses string "32.005" [35]
+          description: Nitrogen dioxide (μg/m3) [39, 41].
+        o3:
+          type: string # Source example uses string "55" [35]
+          description: Ozone (μg/m3) [39, 41].
+        so2:
+          type: string # Source example uses string "7.4" [35]
+          description: Sulfur dioxide (μg/m3) [39, 41].
+        pm2_5:
+          type: string # Source example uses string "6.66" [35]
+          description: PM2.5 (μg/m3) [39, 41].
+        pm10:
+          type: string # Source example uses string "6.66" [35]
+          description: PM10 (μg/m3) [39, 41].
+        us-epa-index:
+          type: string # Source example uses string "1" [35]
+          description: US - EPA standard index [39, 41]. 1=Good, 2=Moderate, 3=Unhealthy for sensitive group, 4=Unhealthy, 5=Very Unhealthy, 6=Hazardous [44-46].
+        gb-defra-index:
+          type: string # Source example uses string "1" [35]
+          description: UK Defra Index [44, 46]. Values map to Low, Moderate, High, Very High bands [46].
+
+    TideObject:
+      type: object
+      description: Tide information [42, 43].
+      properties:
+        tideTime:
+          type: string
+          description: Local tide time formatted as "hh:mm am/pm" (Example: "05:41 am") [42, 43].
+        tideHeight_mt:
+          type: string # Source example uses string "4.26" [8]
+          description: Tide height in meters [42, 43].
+        tideDateTime:
+          type: string
+          description: Local tide time with Date formatted as "yyyy-mm-dd hh:mm" (Example: "2025-02-27 03:57") [42, 43].
+        tide_type:
+          type: string
+          description: Type of tide (High, Low or Normal) [42, 43].
+
+    HourlyData:
+      type: object
+      description: Hourly weather data [40, 43, 45, 47-49].
+      properties:
+        time:
+          type: string # Source uses string "0", "300", etc. [8, 11, 50, 51]
+          description: The time as a number in 24h format (0=12:00 AM, 100=1:00 AM, ..., 1200=12:00 PM, etc.) [45, 47-49].
+        temperature:
+          type: integer
+          description: Temperature in the selected unit (Default: Celsius) [45, 47-49].
+        wind_speed:
+          type: integer
+          description: Wind speed in the selected unit (Default: kilometers/hour) [45, 47-49].
+        wind_degree:
+          type: integer
+          description: Wind degree [45, 47-49].
+        wind_dir:
+          type: string
+          description: Wind direction [45, 47-49].
+        weather_code:
+          type: integer
+          description: Universal weather condition code [45, 47-49].
+        weather_icons:
+          type: array
+          items:
+            type: string
+          description: One or more PNG weather icons associated with the condition [45, 47-49].
+        weather_descriptions:
+          type: array
+          items:
+            type: string
+          description: One or more weather description texts associated with the condition [45, 47-49].
+        precip:
+          type: number
+          description: Precipitation level in the selected unit (Default: MM - millimeters) [45, 47-49].
+        humidity:
+          type: integer
+          description: Air humidity level in percentage [45, 47-49].
+        visibility:
+          type: integer
+          description: Visibility level in the selected unit (Default: kilometers) [45, 47-49].
+        pressure:
+          type: integer
+          description: Air pressure in the selected unit (Default: MB - millibar) [45, 47-49].
+        cloudcover:
+          type: integer
+          description: Cloud cover level in percentage [45, 47-49].
+        heatindex:
+          type: integer
+          description: Heat index temperature in the selected unit (Default: Celsius) [45, 47-49].
+        dewpoint:
+          type: integer
+          description: Dew point temperature in the selected unit (Default: Celsius) [45, 47-49].
+        windchill:
+          type: integer
+          description: Wind chill temperature in the selected unit (Default: Celsius) [45, 47-49].
+        windgust:
+          type: integer
+          description: Wind gust speed in the selected unit (Default: kilometers/hour) [45, 47-49].
+        feelslike:
+          type: integer
+          description: "Feels Like" temperature in the selected unit (Default: Celsius) [45, 47-49].
+        chanceofrain:
+          type: integer
+          description: Chance of rain (precipitation) in percentage [45, 47-49].
+        chanceofremdry:
+          type: integer
+          description: Chance of remaining dry in percentage [45, 47-49].
+        chanceofwindy:
+          type: integer
+          description: Chance of being windy in percentage [45, 47-49].
+        chanceofovercast:
+          type: integer
+          description: Chance of being overcast in percentage [45, 47-49].
+        chanceofsunshine:
+          type: integer
+          description: Chance of sunshine in percentage [45, 47-49].
+        chanceoffrost:
+          type: integer
+          description: Chance of frost in percentage [45, 47-49].
+        chanceofhightemp:
+          type: integer
+          description: Chance of high temperatures in percentage [45, 47-49].
+        chanceoffog:
+          type: integer
+          description: Chance of fog in percentage [45, 47-49].
+        chanceofsnow:
+          type: integer
+          description: Chance of snow in percentage [45, 47-49].
+        chanceofthunder:
+          type: integer
+          description: Chance of thunder in percentage [45, 47-49].
+        uv_index:
+          type: integer
+          description: UV index [45, 47-49].
+        # Marine specific hourly data [48, 49]
+        sig_height_m:
+          type: string # Source example uses string "0.7" [8]
+          description: Significant wave height in metres [48, 49].
+        swell_height:
+          type: string # Source example uses string "2.4" [8]
+          description: Swell wave height in the selected "unit" (Default: meters) [48, 49].
+        swell_dir:
+          type: integer
+          description: Swell direction in degree [48, 49].
+        swell_dir_16_point:
+          type: string
+          description: Swell direction in 16-point compass [48, 49].
+        swell_period_secs:
+          type: integer
+          description: Swell period in seconds [48, 49].
+        water_temp:
+          type: integer
+          description: Water temperature in selected "unit" (Default: Celcius) [48, 49].
+        # Air Quality for forecast hourly data [45]
+        air_quality:
+          $ref: '#/components/schemas/AirQualityObject'
+          description: Air quality details for this hour [45].
+
+    CurrentObject:
+      type: object
+      description: Real-time weather data [34, 35].
+      properties:
+        observation_time:
+          type: string
+          description: The UTC time for when the returned whether data was collected [34].
+        temperature:
+          type: integer
+          description: The temperature in the selected unit (Default: Celsius) [34].
+        weather_code:
+          type: integer
+          description: The universal weather condition code [34].
+        weather_icons:
+          type: array
+          items:
+            type: string
+          description: One or more PNG weather icons [34].
+        weather_descriptions:
+          type: array
+          items:
+            type: string
+          description: One or more weather description texts [34].
+        astro:
+          $ref: '#/components/schemas/AstroObject'
+          description: Astronomic weather details [34].
+        air_quality:
+          $ref: '#/components/schemas/AirQualityObject'
+          description: Air quality details [39].
+        wind_speed:
+          type: integer
+          description: Wind speed in the selected unit (Default: kilometers/hour) [44].
+        wind_degree:
+          type: integer
+          description: Wind degree [44].
+        wind_dir:
+          type: string
+          description: Wind direction [44].
+        pressure:
+          type: integer
+          description: Air pressure in the selected unit (Default: MB - millibar) [44].
+        precip:
+          type: number
+          description: Precipitation level in the selected unit (Default: MM - millimeters) [44].
+        humidity:
+          type: integer
+          description: Air humidity level in percentage [44].
+        cloudcover:
+          type: integer
+          description: Cloud cover level in percentage [44].
+        feelslike:
+          type: integer
+          description: "Feels Like" temperature in the selected unit (Default: Celsius) [44].
+        uv_index:
+          type: integer
+          description: UV index [44].
+        visibility:
+          type: integer
+          description: Visibility level in the selected unit (Default: kilometers) [44].
+
+    DailyHistoricalData:
+      type: object
+      description: Daily historical weather data [10, 36].
+      properties:
+        date:
+          type: string
+          format: date
+          description: The requested historical date (yyyy-mm-dd) [10, 36].
+        date_epoch:
+          type: integer
+          description: The requested historical date as UNIX timestamp [10, 36].
+        astro:
+          $ref: '#/components/schemas/AstroObject'
+          description: Astronomic weather details for the day [10, 36].
+        mintemp:
+          type: integer
+          description: Minimum temperature of the day in the selected unit (Default: Celsius) [40, 43].
+        maxtemp:
+          type: integer
+          description: Maximum temperature of the day in the selected unit (Default: Celsius) [40, 43].
+        avgtemp:
+          type: integer
+          description: Average temperature of the day in the selected unit (Default: Celsius) [40, 43].
+        totalsnow:
+          type: integer
+          description: Snow fall amount in the selected unit (Default: CM - Centimeters) [40, 43].
+        sunhour:
+          type: number
+          description: Number of sun hours [40, 43].
+        uv_index:
+          type: integer
+          description: UV index [40, 43].
+        hourly:
+          type: array
+          items:
+            $ref: '#/components/schemas/HourlyData'
+          description: Series of sub response objects containing hourly weather data [40, 43].
+        tides:
+          type: array
+          items:
+            $ref: '#/components/schemas/TideObject'
+          description: Series of sub response objects containing tides information (for marine endpoint) [43].
+
+    DailyForecastData:
+      type: object
+      description: Daily forecast weather data [37, 38].
+      properties:
+        date:
+          type: string
+          format: date
+          description: The requested forecast date (yyyy-mm-dd) [37, 38].
+        date_epoch:
+          type: integer
+          description: The requested forecast date as UNIX timestamp [37, 38].
+        astro:
+          $ref: '#/components/schemas/AstroObject'
+          description: Astronomic weather details for the day [37, 38].
+        mintemp:
+          type: integer
+          description: Minimum temperature of the day in the selected unit (Default: Celsius) [41, 42].
+        maxtemp:
+          type: integer
+          description: Maximum temperature of the day in the selected unit (Default: Celsius) [41, 42].
+        avgtemp:
+          type: integer
+          description: Average temperature of the day in the selected unit (Default: Celsius) [41, 42].
+        totalsnow:
+          type: integer
+          description: Snow fall amount in the selected unit (Default: CM - Centimeters) [41, 42].
+        sunhour:
+          type: number
+          description: Number of sun hours [41, 42].
+        uv_index:
+          type: integer
+          description: UV index [41, 42].
+        air_quality:
+          $ref: '#/components/schemas/AirQualityObject'
+          description: Air quality details for the day [41].
+        hourly:
+          type: array
+          items:
+            $ref: '#/components/schemas/HourlyData'
+          description: Series of sub response objects containing hourly weather data [45].
+        tides:
+          type: array
+          items:
+            $ref: '#/components/schemas/TideObject'
+          description: Series of sub response objects containing tides information (for marine endpoint) [42].
+
+
+    LocationAutocompleteResult:
+      type: object
+      description: A single location result from the autocomplete endpoint [13].
+      properties:
+        name:
+          type: string
+          description: The name of the resulting city [13].
+        country:
+          type: string
+          description: The associated country [13].
+        region:
+          type: string
+          description: The name of the resulting region/state/district [13].
+        lon:
+          type: string # Source uses string "-0.106" [13]
+          description: The longitude coordinates [13].
+        lat:
+          type: string # Source uses string "51.517" [13]
+          description: The latitude coordinates [13].
+        timezone_id:
+          type: string
+          description: The timezone ID (Example: Europe/London) [13].
+        utc_offset:
+          type: string # Source uses string "1.0" [13]
+          description: The UTC offset (in hours) [13].
+
+    CurrentWeatherResponse:
+      type: object
+      description: Response schema for the Current Weather endpoint [35].
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestObject'
+        location:
+          $ref: '#/components/schemas/LocationObject'
+        current:
+          $ref: '#/components/schemas/CurrentObject'
+      required:
+        - request
+        - location
+        - current
+
+    HistoricalWeatherResponse:
+      type: object
+      description: Response schema for the Historical Weather endpoint [50].
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestObject'
+        location:
+          $ref: '#/components/schemas/LocationObject'
+        current:
+          $ref: '#/components/schemas/CurrentObject'
+          description: Current weather data is also returned in addition to historical data [50].
+        historical:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DailyHistoricalData'
+          description: Historical data, keyed by date (e.g., "2008-07-01") [50].
+      required:
+        - request
+        - location
+        - current
+        - historical
+
+    WeatherForecastResponse:
+      type: object
+      description: Response schema for the Weather Forecast endpoint [51].
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestObject'
+        location:
+          $ref: '#/components/schemas/LocationObject'
+        current:
+          $ref: '#/components/schemas/CurrentObject'
+          description: Current weather data is also returned [37].
+        forecast:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DailyForecastData'
+          description: Forecast data, keyed by date (e.g., "2019-09-07") [51].
+      required:
+        - request
+        - location
+        - current
+        - forecast
+
+    MarineWeatherResponse:
+      type: object
+      description: Response schema for the Marine Weather endpoint [8].
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestObject'
+        # Note: Location and Current objects are not explicitly shown in the Marine example response [8]
+        # but the notes say "request will not be explained below as they are already mentioned in the Current Weather Endpoint section" [38]
+        # This might imply they are present, but the example doesn't show them.
+        # Assuming they might be present based on the note structure, though the example is missing them.
+        # I'll define them as optional based on the example structure [8].
+        location:
+           $ref: '#/components/schemas/LocationObject'
+           description: Location data (Optional, based on example) [8].
+        current:
+           $ref: '#/components/schemas/CurrentObject'
+           description: Current weather data (Optional, based on example) [8].
+        forecast:
+          type: array
+          items:
+             $ref: '#/components/schemas/DailyForecastData' # Marine response uses "forecast" key with array structure [8, 38]
+          description: Marine forecast data as an array of daily objects [8]. Note: Response object description refers back to forecast and historical sections [38]. Daily object includes astro, min/max/avg temp, tides, uv_index, and hourly data [42, 48]. Hourly data includes marine specific fields [48].
+      required:
+        - request
+        - forecast
+
+    HistoricalMarineResponse:
+      type: object
+      description: Response schema for the Historical Marine Weather endpoint [11].
+      properties:
+        request:
+          $ref: '#/components/schemas/RequestObject'
+        # Similar to Marine Weather, Location and Current objects are not shown in the example [11]
+        # but the notes refer back to the Current Weather section [10].
+        # Defining them as optional based on the example structure [11].
+        location:
+           $ref: '#/components/schemas/LocationObject'
+           description: Location data (Optional, based on example) [11].
+        current:
+           $ref: '#/components/schemas/CurrentObject'
+           description: Current weather data (Optional, based on example) [11].
+        historical:
+          type: object
+          additionalProperties:
+             $ref: '#/components/schemas/DailyHistoricalData' # Historical Marine response uses "historical" key with object structure [10, 11]
+          description: Historical marine data, keyed by date [11]. Daily object includes astro, min/max/avg temp, tides, uv_index, and hourly data [10, 43, 49]. Hourly data includes marine specific fields [49].
+      required:
+        - request
+        - historical
+
+    LocationAutocompleteResponse:
+      type: object
+      description: Response schema for the Location Autocomplete endpoint [13].
+      properties:
+        request:
+          type: object
+          properties:
+             query:
+                type: string
+                description: The exact query sent to the API [13].
+             results:
+                type: integer
+                description: The number of results found [13].
+          required:
+             - query
+             - results
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationAutocompleteResult'
+          description: Array of resulting locations [13].
+      required:
+        - request
+        - results
