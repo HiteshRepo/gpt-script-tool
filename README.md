@@ -29,7 +29,6 @@ make help
 ├── sample-data/          # Test data for demos
 ├── scripts/              # Setup and build scripts
 ├── support/              # Supporting utilities
-├── config/               # Configuration files
 └── docs/                 # Detailed documentation
 ```
 
@@ -60,7 +59,7 @@ make help
 
 To add a new tool:
 1. Create the `.gpt` file in the appropriate `tools/` subdirectory
-2. Add a Makefile target in `config/Makefile`
+2. Add a Makefile target in `Makefile`
 3. Update documentation in `docs/`
 4. Test with sample data
 
