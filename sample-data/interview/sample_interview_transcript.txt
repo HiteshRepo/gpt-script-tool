@@ -1,0 +1,209 @@
+Video Interview with Candidate (Job Role: Product Engineer)
+Mon, Jun 9, 2025
+
+0:00 - Unidentified Speaker
+we will start with some introduction.
+
+0:00 - Interviewer
+So what in here, I like to understand the current project that you have been working on. Okay. What could be your role and responsibility in that project and in general, the architecture of the project, what are the tech stacks used and what you specifically do with that project. And then we will actually go over your assignment that you submitted. I have taken a look and we will try to find any gaps in that codebase, right? And if it is there, then we will close the gaps, extend functionalities, basically that, right? And then we'll, if time permits, we'll do some couple of problem-solvings and then we'll wind up any questions you have for me, okay? Yeah, sure. Cool, Candidate.
+
+0:54 - Interviewer
+So I have been working with TechCorp for the past two and a half years and I have worked on a couple of projects and the current project I have been working on is a SaaS platform which does backup operations of user data and my tech stats are most around Golang. The language has been Golang consistently for the last two projects and so we deploy our infra into Azure at the moment. Earlier I used to deploy to AWS in a different project and currently as a product engineer means I work on the SaaS platform and the core logic but sometimes and may have to be involved with the platform side of things. So the infrastructure as code, right, the Pulumi, or AWS CDK, all those things come into the picture. And yeah, but Kubernetes also is essential in day to day. Even though I'm not in the platform team, but it's essential to deploy your stuff into personal stack and other stuff.
+
+2:18 - Candidate
+Yeah, these are my So to give a brief about me, I have close to six and a half years of experience in IT. So initially I was working as a Java dev and then I was working as a full stack and full stack plus a blockchain dev. So where we'll be building systems or which are compatible with blockchain not only basically there will be an integration layer between the back-end applications and blockchain so with respect to my current company I joined here two years back so I joined here as a blockchain engineer plus a goal for goal line so here what we are building is we are building a software supply chain based application which are compatible which will interact with blockchain so basically we'll be having so the project is like it's for a client they have a lot of on the supply chain they'll be having a lot of paperwork so they wanted to digitalize it so there will be multiple parties involved so that's the reason they wanted to go for blockchain you know for transparency and stuff so our project looks like we had a front-end and we had a back-end and we have this blockchain layer which is deployed on kubernetes based basically it's based on framework called hyperledger and we were using mysql database and blockchain blockchain code we have something called a smart contract where we write the rules that is written in Golang and also the layer which talks to the blockchain which is the middleware application so that is also written in Go. So here in this project I primarily work on the backend plus the Go modules which write for blockchain and also I do sit with the infra team so we deployed this solution in on-prem so I just sit with the infra people and you know help them deploying the block especially the blockchain part and the communication between the other services so my role primarily would be you know you know, working with the, you know, friends and developers and, and also the architects and finalizing the schema and, you know, translating that into the code and yeah, things like that I'll be doing. And, uh, apart from this project, I was also involved in a project called, uh, eWallet, so where this is like a side, side SLP for me. So where we, where we, where we used a framework called self-sovereign identities, using which we built wallets, targeting the, you know, automotive vehicles, which will be running inside the dashboard of the vehicles, which will link back to the IOTs and stuff. That's like a view machine that Thomas Neumann was doing apart from this also I was working on other supply chain based solution which like for tracking pharmaceutical data, pharmaceutical data and food related data so it's only blockchain so we pretty much focused on these areas so this is overall brief.
+
+6:24 - Interviewer
+Alright so I'm particularly interested in the API side of thing that you worked in your current project.
+
+6:33 - Candidate
+Right.
+
+6:34 - Interviewer
+So, I mean, I'm a bit distant when it comes to blockchain, right?
+
+6:40 - Candidate
+So, yeah, understood.
+
+6:41 - Unidentified Speaker
+Yeah.
+
+6:41 - Interviewer
+So, tell me like, what, what was the purpose of building those HTAPIs for?
+
+6:48 - Candidate
+So, main purpose is for building on high levels. Why we build HTAPIs is to make our systems, you know, interoperable with other systems, meaning anybody, any, any, it can talk to any system which uses REST or any client application will use REST. That's the main thing why we use REST API. And, but what were the APIs about? Like, it's, what was the schema, means what they did exactly, like let's pick one and yeah suppose we have this order orders or orders so what this order will have is this order will have a list of products so and I will come with also we have something called orders okay so in orders we have a status and it Order itself is a it has many you know other it's linked with the map with other schemas like product invoiced so say suppose if we want to create an order so we need to pass the you know products which are associated with it and the status and it will be created so then there will be APIs to update the status so say if the order moves to another step we can update it so like that so there will be stages so like this we have endpoints for creation of products and and update the quantity price so on so on yeah so so you mentioned that you have endpoints for products that's yeah that would be mostly those endpoints the functionality of those endpoints would be that you will pass some products and quantities maybe. What are the products essentially?
+
+9:07 - Interviewer
+When you say products, what are these products?
+
+9:11 - Candidate
+So, these products on products in this what you are asking? When we say products, what are these means?
+
+9:22 - Interviewer
+For example, in e commerce, the products are the things right? In your project, what are the products?
+
+9:32 - Candidate
+So here, it's for a government organization. So what they'll do is they'll procure supplies from different vendors. So it will be about the supply information, like various materials and equipment.
+
+9:52 - Interviewer
+So you will keep track of the inventories as well?
+
+9:58 - Candidate
+Yeah. Okay.
+
+9:59 - Interviewer
+It's like, and how, how, how do you, uh, when the order is placed, then some status changes, right? How these status are updated means.
+
+10:11 - Candidate
+So usually the demand will be raised from the organization side and to a particular vendor and that vendor will, uh, so initially it will be created. So once the vendor comes. The state, he'll verify those information and if it's fine, he'll accept it. So that's how that's how it is. And also, we had this auto approval thing, like it's not getting updated and it will be uploaded automatically after 24 hours. All right. Yeah. Got it. So I think we can move on to the assignment.
+
+10:50 - Interviewer
+Would you be able to share the screen? It's loading for me. Yeah, I can see now.
+
+11:07 - Candidate
+Yeah.
+
+11:08 - Interviewer
+We'll start with the handler. Okay. Can you to the handler. Yeah, yes, yes. So basically, you what you are doing is you this is a handler and here you are accepting the request and first you are checking if the URL is valid or not right by parsing. Then you are generating a shortcode and then you're returning a response based on the shortcode right and but also So scroll down. And you're also creating an entry in your repository, right? Ideally, means I would like to know your opinion. Would you not be okay, okay, fine. I think you are just creating this response body. And then you are.
+
+12:14 - Candidate
+Yeah, correct. Checking here if it's already a shortened URL once if the same endpoint is given I'm just checking it and then I'm saying but anyway you are already what is the what is this okay okay so you are checking if it is already present the short right so that means if it is already present then what will you do so I'm Sending the, I'm just giving the same existing short URL. Oh, okay.
+
+12:49 - Interviewer
+I mean, uh, see, see the short URL that you created at line number 44. That would be same as the existing.shortend URL, no?
+
+13:01 - Candidate
+Existing. Yes. Yes. Correct. Existing.shortend URL. Right. Then why are you checking by using short URL?
+
+13:09 - Interviewer
+You can directly return the short URL directly. Yes. Yes. Okay.
+
+13:17 - Candidate
+One second. I am fetching it here. You are fetching it fine.
+
+13:26 - Interviewer
+Can you go inside that? This one right?
+
+13:32 - Candidate
+No, no, no, not that one.
+
+13:37 - Interviewer
+Not that one.
+
+13:39 - Candidate
+Okay. Go to the import layer. Go inside it. This is the interface.
+
+13:49 - Interviewer
+Not test. So when you are doing h.URLs, what is h.URLs?
+
+13:57 - Candidate
+h.URLs is calling the storage actually inside the map. Just passing the key and checking.
+
+14:09 - Interviewer
+But what is the key is the short URL. If you go back to the controller.co. If you go scroll down, when you are doing a create, you are passing the URL data. Again, go back to the URL service. Dot shortened URL, go back to the controller.
+
+14:38 - Candidate
+Yeah, see, got it.
+
+14:42 - Interviewer
+So see, at line number 658, right? Your story is 58. So when you are creating in your repository, right? You're using the short URL itself as the key. Isn't it? So, that means whenever you will do a find at line number 46, you will also find by using that short URL. So, it is as good as returning the short URL itself instead of finding in your repository. So, instead what you can do is you can actually store long URL equals to short URL. So, whenever there is a request if you check that if this long URL is already shortened or not, right? Without generating the shortcode directly return the URL, then there is a benefit. Okay, okay. You understand what I am saying? Can you go to the top end endpoints, the top metrics or something like that? And there is another endpoint for metrics, right?
+
+16:05 - Candidate
+So, this is redirect matrix by domain.
+
+16:09 - Interviewer
+Can you go inside this, show me the implementation. So, here what you are doing is you are getting all the URLs. Then you are creating a domain frequency map. Then you are doing a short operation and then you are done. Shortener application will be, you know, a very high frequency application, right? There is a lot of URLs, high traffic. So that means your URLs map will hold a lot of URLs, like maybe in the range of millions. Okay. So will it not be inefficient to, you know, to iterate through the URLs, right? Within the request. Yes. Because it will take a lot of time to give the response now, right? Because it to iterate all the URLs, extract the domain, right?
+
+17:13 - Candidate
+So what improvement can you make here? OK. Let me go to the model. OK.
+
+17:46 - Unidentified Speaker
+We. Hello.
+
+19:25 - Candidate
+So what we can do is I can create one more model so which has so we can take this model and what we can do is we can have this map we can have a map initialized and whenever we are inserting it right. So, we can obtain the domain and metrics count something of that sort. So, we can have a map uh in memory and whenever we are inserting or saving it to the url map so we can usually add this also and we can uh so we can sort it and return okay so you're suggesting uh when you are inserting the URL you will create the domain frequency.
+
+20:51 - Interviewer
+And when there is a request for top three top metrics then you will just sort it and give it. But still that will reduce the number of URLs to number of domains isn't it? And number of domains is less than number of URLs isn't it?
+
+21:15 - Candidate
+Number of domains is less than number of URLs.
+
+21:19 - Interviewer
+Right, because Google.com slash A and Google.com slash B are two different URLs but one domain, isn't it? Yes, yes, correct. So domains will always be lesser and URLs will be higher. But still, the domains will be the range of thousands still, right? Right. So if you sort the domains in the request itself, it will still take some time, isn't it? Can you recollect any data structure that will help you to pick the top three domains only? You don't have to sort it, it will automatically sort when you insert any data structure comes to your file.
+
+22:11 - Candidate
+Say something.
+
+22:23 - Candidate
+But then we, I'm not sure whether we set or get as set kind of thing go or not I have not used it before so that is the case yeah we can use something like a set any idea any idea about heap heap no heap I have not used so let us now go to the docker file once okay tell me you created multistage dockerfile right what is the benefit of doing that so when we create multistage dockerfile like we can actually image size will be lesser we can once we build we can only copy the executable and this will be the final yeah and then at line number six you copied go more and go
+
+23:45 - Interviewer
+some and then in line number 10 you are copying everything else why did you split the copy any reason so after downloading copying just copying So there are two different copy, right? You're copying only pomod and gosam in first attempt and everything else in the last, right?
+
+24:28 - Candidate
+So you can also copy everything at once. Correct. So I can only do this also. Yeah, so I have a couple of data structure questions, Candidate.
+
+24:45 - Interviewer
+So I'll ping you in the chat. The first question is, let's say, you know, we have two arrays, like 2, 4, and 7. And then I have another array called 3, 6, 9, 13. You want a result array that says 2, 3, 4, 5, 6, 7. I want to achieve this. Can you try a pseudocode? Okay.
+
+25:20 - Candidate
+2, 4, 7, 3, 6, 9, 13. You can copy this to your You are seeing my screen, right?
+
+25:35 - Unidentified Speaker
+Yeah.
+
+25:37 - Interviewer
+Okay.
+
+25:40 - Candidate
+So, I can first merge these two arrays. Just do a sorting, normal sort, sorting.
+
+26:15 - Unidentified Speaker
+Okay.
+
+26:15 - Interviewer
+Okay. So, A and B are already sorted. Any other approach you can think of
+
+30:02 - Interviewer
+So, basically if you see what we want is to print 1 to 10 using 3 goroutines. So, if you see there are 3 goroutines right goroutine 1 is printing 1, goroutine 2 is printing 2 is true then coroutine 3 is printing 3 then you see coroutine 1 is again printing 4 right like that. So, can you tell me how can we achieve this?
+
+30:48 - Candidate
+I think we can create three goroutines and also we can create 3 channels we can just so goroutine starts we can have a loop inside and goroutine 1 will start from 1 and it will increment by 2 likewise go routine start from 2 and increment yeah we can plus 2 plus 2 we can put on each go routine and we can have channels and make it block and we can swap from send values we can have three channels and you know make it wait so we'll first start the goroutine 1 and once goroutine 1 prints we can pass data from the channel to goroutine 2 and then we can pass data to channel goroutine 3 and from 3 to 1 and when it prints 10 in some goroutine we will close all the channels Something like that. OK.
+
+32:40 - Interviewer
+Can you attempt some pseudocode on this? OK, sure.
+
+32:59 - Candidate
+So we have a channel 1, we have a channel 2, I will just write it, if you want I will complete it. Channel 3, we have a main function and I have my main function. Go on 15 in one or let's say here are three functions 15 to 53. So, we will start from i, i, 10, 10 by 3 means I equals 1, 10, 1, 3, 5, 5, 3, 5, Simulating. Start from
+
+34:56 - Candidate
+like this. Only two, three will call and and send value to channel 1 and pass and call channel 1 so here it will wait for channel 1 so and then I print so after printing I will do chan2 so here it will be send value to chan2 and here channel 3 again send to channel 1 only this means Let this one receive. Look over a tree.
+
+37:28 - Candidate
+So, if I close all the channels. Yeah. Anything else?
+
+37:55 - Interviewer
+need or this should be enough. Let me check.
+
+37:57 - Candidate
+So, this, this, this more block our channel 4 and block it here so in the end we close all the 3 channels and send data to done channel so this will be unblocked and finally we can close this also So, this data will be started and channel 1 will be called, we will get data, once we get data we will print, print after printing we will send data to our channel 2.
+
+39:19 - Interviewer
+Yeah, I think what what extra we need is we need a weight group to wait for all these 3 coroutines. And we need to pass those weight groups to all the coroutines who can differ the weight group after they are done.
+
+39:40 - Candidate
+So, instead of channel we can correct. So, and then correct. Yeah. Okay, sure Candidate.
+
+39:47 - Interviewer
+I think That would be good. Do you have any questions for me?
+
+39:53 - Candidate
+So what type of projects or what are you exactly looking for? I don't know.
+
+39:59 - Interviewer
+In our company, we mostly have cloud native projects. But there are a few projects that are not cloud native. So one of the projects that I'm currently working on is, as I said, like it's a product that deals with backup of data. So it's a normal app project like, but it has other good stuff also. So yeah, I mean, basically you need to be having good thought process. Even though if you are working on cloud native, it's not meant for you to be very good at Kubernetes. You need to have some basic understanding of Kubernetes. So that you can be easily ramped up and assigned to a project, right?
+
+40:49 - Candidate
+So that's the idea. Okay. Yeah. Okay. Thank you Candidate. Thank you.

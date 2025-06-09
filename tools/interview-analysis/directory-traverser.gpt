@@ -1,0 +1,29 @@
+Name: Directory Traverser
+Description: A tool that traverses a directory and lists all files, particularly useful for finding interview-related documents
+Tools: sys.exec
+Parameters: directory: The directory path to traverse
+
+#!/bin/bash
+
+DIRECTORY_PATH="${DIRECTORY}"
+
+# Check if directory exists
+if [ ! -d "$DIRECTORY_PATH" ]; then
+    echo "Error: Directory '$DIRECTORY_PATH' does not exist"
+    exit 1
+fi
+
+echo "Traversing directory: $DIRECTORY_PATH"
+echo "Found the following files:"
+echo "=========================="
+
+# Find all files in the directory and subdirectories
+find "$DIRECTORY_PATH" -type f -name "*.txt" -o -name "*.md" -o -name "*.json" -o -name "*.csv" | while read -r file; do
+    echo "File: $file"
+    echo "Type: $(file -b "$file" | cut -d',' -f1)"
+    echo "Size: $(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null) bytes"
+    echo "---"
+done
+
+echo "=========================="
+echo "Directory traversal complete"
