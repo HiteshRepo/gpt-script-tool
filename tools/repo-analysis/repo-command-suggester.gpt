@@ -1,0 +1,331 @@
+Tools: gitstatus, fileanalysis, suggest_commands
+Chat: true
+
+Analyze the current repository state and suggest the most relevant commands to run based on:
+- Git status and branch information
+- File changes and modifications
+- Development workflow patterns
+
+The tool provides prioritized command suggestions with clear explanations to help streamline your development workflow.
+
+First, I'll analyze the git status, then analyze file changes, and finally provide prioritized command suggestions.
+
+Let me start by checking the repository status:
+
+${gitstatus}
+
+Now let me analyze the modified files:
+
+${fileanalysis}
+
+Based on the analysis, here are my command suggestions:
+
+${suggest_commands}
+
+---
+Name: gitstatus
+Description: Analyze git repository status including branch, staging area, and remote tracking
+
+#!/bin/bash
+
+echo "📊 Repository Status Analysis"
+echo "================================"
+
+# Check if we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "❌ Not a git repository"
+    exit 1
+fi
+
+# Current branch and tracking info
+CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "detached HEAD")
+echo "🌿 Current branch: $CURRENT_BRANCH"
+
+# Remote tracking status
+if [ "$CURRENT_BRANCH" != "detached HEAD" ]; then
+    UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+    if [ -n "$UPSTREAM" ]; then
+        echo "🔗 Tracking: $UPSTREAM"
+        
+        # Check ahead/behind status
+        AHEAD=$(git rev-list --count HEAD..@{u} 2>/dev/null || echo "0")
+        BEHIND=$(git rev-list --count @{u}..HEAD 2>/dev/null || echo "0")
+        
+        if [ "$AHEAD" -gt 0 ]; then
+            echo "⬇️  Behind remote by $AHEAD commits"
+        fi
+        if [ "$BEHIND" -gt 0 ]; then
+            echo "⬆️  Ahead of remote by $BEHIND commits"
+        fi
+        if [ "$AHEAD" -eq 0 ] && [ "$BEHIND" -eq 0 ]; then
+            echo "✅ Up to date with remote"
+        fi
+    else
+        echo "🔗 No upstream tracking branch"
+    fi
+fi
+
+# Staging area status
+STAGED_FILES=$(git diff --cached --name-only | wc -l | tr -d ' ')
+UNSTAGED_FILES=$(git diff --name-only | wc -l | tr -d ' ')
+UNTRACKED_FILES=$(git ls-files --others --exclude-standard | wc -l | tr -d ' ')
+
+echo "📝 Changes:"
+echo "   - Staged files: $STAGED_FILES"
+echo "   - Unstaged files: $UNSTAGED_FILES" 
+echo "   - Untracked files: $UNTRACKED_FILES"
+
+# Show specific files if there are changes
+if [ "$STAGED_FILES" -gt 0 ]; then
+    echo "📋 Staged files:"
+    git diff --cached --name-only | sed 's/^/   - /'
+fi
+
+if [ "$UNSTAGED_FILES" -gt 0 ]; then
+    echo "📝 Modified files:"
+    git diff --name-only | sed 's/^/   - /'
+fi
+
+if [ "$UNTRACKED_FILES" -gt 0 ] && [ "$UNTRACKED_FILES" -le 10 ]; then
+    echo "❓ Untracked files:"
+    git ls-files --others --exclude-standard | sed 's/^/   - /'
+elif [ "$UNTRACKED_FILES" -gt 10 ]; then
+    echo "❓ Untracked files: $UNTRACKED_FILES (too many to list)"
+fi
+
+# Check for merge conflicts
+CONFLICT_FILES=$(git diff --name-only --diff-filter=U 2>/dev/null | wc -l | tr -d ' ')
+if [ "$CONFLICT_FILES" -gt 0 ]; then
+    echo "⚠️  Merge conflicts in $CONFLICT_FILES files:"
+    git diff --name-only --diff-filter=U | sed 's/^/   - /'
+fi
+
+# Check stash status
+STASH_COUNT=$(git stash list | wc -l | tr -d ' ')
+if [ "$STASH_COUNT" -gt 0 ]; then
+    echo "📦 Stashed changes: $STASH_COUNT"
+fi
+
+echo ""
+
+---
+Name: fileanalysis
+Description: Analyze modified files to provide workflow-specific suggestions
+
+#!/bin/bash
+
+echo "🔍 File Analysis"
+echo "================"
+
+# Get all modified files (staged and unstaged)
+ALL_MODIFIED=$(git diff --name-only HEAD 2>/dev/null)
+STAGED_FILES=$(git diff --cached --name-only 2>/dev/null)
+UNSTAGED_FILES=$(git diff --name-only 2>/dev/null)
+
+if [ -z "$ALL_MODIFIED" ] && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+    echo "✅ No modified files detected"
+    echo ""
+    return
+fi
+
+# Analyze file types and patterns
+declare -A file_types
+declare -A workflow_hints
+
+# Process all modified files
+for file in $ALL_MODIFIED; do
+    if [ -f "$file" ]; then
+        ext="${file##*.}"
+        case "$ext" in
+            "gpt")
+                file_types["gptscript"]=$((${file_types["gptscript"]:-0} + 1))
+                workflow_hints["gptscript"]="Test GPTScript tools"
+                ;;
+            "py")
+                file_types["python"]=$((${file_types["python"]:-0} + 1))
+                workflow_hints["python"]="Run Python tests/linting"
+                ;;
+            "js"|"ts"|"jsx"|"tsx")
+                file_types["javascript"]=$((${file_types["javascript"]:-0} + 1))
+                workflow_hints["javascript"]="Run npm test/lint"
+                ;;
+            "md")
+                file_types["markdown"]=$((${file_types["markdown"]:-0} + 1))
+                workflow_hints["markdown"]="Update documentation"
+                ;;
+            "json")
+                if [[ "$file" == *"package.json"* ]]; then
+                    file_types["package"]=$((${file_types["package"]:-0} + 1))
+                    workflow_hints["package"]="Install dependencies"
+                else
+                    file_types["config"]=$((${file_types["config"]:-0} + 1))
+                    workflow_hints["config"]="Validate configuration"
+                fi
+                ;;
+            "yaml"|"yml")
+                file_types["yaml"]=$((${file_types["yaml"]:-0} + 1))
+                workflow_hints["yaml"]="Validate YAML syntax"
+                ;;
+        esac
+        
+        # Special file checks
+        case "$(basename "$file")" in
+            "Makefile")
+                file_types["makefile"]=$((${file_types["makefile"]:-0} + 1))
+                workflow_hints["makefile"]="Check make targets"
+                ;;
+            "README.md")
+                file_types["readme"]=$((${file_types["readme"]:-0} + 1))
+                workflow_hints["readme"]="Review documentation"
+                ;;
+            ".gitignore")
+                file_types["gitignore"]=$((${file_types["gitignore"]:-0} + 1))
+                workflow_hints["gitignore"]="Verify ignore patterns"
+                ;;
+        esac
+    fi
+done
+
+# Display file type summary
+if [ ${#file_types[@]} -gt 0 ]; then
+    echo "📁 File types modified:"
+    for type in "${!file_types[@]}"; do
+        echo "   - $type: ${file_types[$type]} files"
+    done
+    echo ""
+fi
+
+echo ""
+
+---
+Name: suggest_commands
+Description: Generate prioritized command suggestions based on repository analysis
+
+#!/bin/bash
+
+echo "🚀 Suggested Commands"
+echo "===================="
+
+# Get git status info
+STAGED_COUNT=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')
+UNSTAGED_COUNT=$(git diff --name-only 2>/dev/null | wc -l | tr -d ' ')
+UNTRACKED_COUNT=$(git ls-files --others --exclude-standard 2>/dev/null | wc -l | tr -d ' ')
+CONFLICT_COUNT=$(git diff --name-only --diff-filter=U 2>/dev/null | wc -l | tr -d ' ')
+
+# Check remote status
+CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
+AHEAD=0
+BEHIND=0
+if [ -n "$CURRENT_BRANCH" ] && git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+    AHEAD=$(git rev-list --count @{u}..HEAD 2>/dev/null || echo "0")
+    BEHIND=$(git rev-list --count HEAD..@{u} 2>/dev/null || echo "0")
+fi
+
+priority=1
+
+# Handle merge conflicts first (highest priority)
+if [ "$CONFLICT_COUNT" -gt 0 ]; then
+    echo "$priority. git status"
+    echo "   → Review and resolve merge conflicts"
+    priority=$((priority + 1))
+    echo ""
+    echo "$priority. git add <resolved-files>"
+    echo "   → Stage resolved conflict files"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Handle unstaged changes
+if [ "$UNSTAGED_COUNT" -gt 0 ]; then
+    if [ "$UNSTAGED_COUNT" -le 5 ]; then
+        # Show specific files for small changes
+        echo "$priority. git add [specific files]"
+        echo "   → Stage specific modified files:"
+        git diff --name-only | sed 's/^/     /'
+    else
+        echo "$priority. git add ."
+        echo "   → Stage all $UNSTAGED_COUNT modified files"
+    fi
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Handle untracked files
+if [ "$UNTRACKED_COUNT" -gt 0 ] && [ "$UNTRACKED_COUNT" -le 5 ]; then
+    echo "$priority. git add [new files]"
+    echo "   → Stage new files:"
+    git ls-files --others --exclude-standard | sed 's/^/     /'
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Handle staged changes - integrate with existing git-commit tool
+if [ "$STAGED_COUNT" -gt 0 ]; then
+    echo "$priority. gptscript tools/github/git-commit.gpt"
+    echo "   → Generate and create commit for $STAGED_COUNT staged files"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Handle remote sync
+if [ "$BEHIND" -gt 0 ]; then
+    echo "$priority. git pull"
+    echo "   → Pull $BEHIND commits from remote"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+if [ "$AHEAD" -gt 0 ]; then
+    echo "$priority. git push"
+    echo "   → Push $AHEAD commits to remote"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Workflow suggestions based on file types
+MODIFIED_FILES=$(git diff --name-only HEAD 2>/dev/null)
+
+# Check for GPTScript files
+if echo "$MODIFIED_FILES" | grep -q "\.gpt$"; then
+    echo "$priority. gptscript [modified-tool].gpt"
+    echo "   → Test modified GPTScript tools"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Check for Makefile changes
+if echo "$MODIFIED_FILES" | grep -q "Makefile"; then
+    echo "$priority. make help"
+    echo "   → Review available make targets after Makefile changes"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Check for package.json changes
+if echo "$MODIFIED_FILES" | grep -q "package\.json"; then
+    echo "$priority. npm install"
+    echo "   → Install updated dependencies"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# Check for Python files
+if echo "$MODIFIED_FILES" | grep -q "\.py$"; then
+    echo "$priority. python -m pytest"
+    echo "   → Run Python tests after code changes"
+    priority=$((priority + 1))
+    echo ""
+fi
+
+# General suggestions if no specific changes
+if [ "$STAGED_COUNT" -eq 0 ] && [ "$UNSTAGED_COUNT" -eq 0 ] && [ "$UNTRACKED_COUNT" -eq 0 ]; then
+    echo "✅ Repository is clean!"
+    echo ""
+    echo "💡 General suggestions:"
+    echo "   - git log --oneline -10  → Review recent commits"
+    echo "   - git branch -a         → List all branches"
+    echo "   - make help             → See available commands"
+fi
+
+echo ""
+echo "💡 Tip: Run this tool anytime with 'make suggest-commands'"
