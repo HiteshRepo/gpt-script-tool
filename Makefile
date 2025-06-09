@@ -30,3 +30,11 @@ run-local-files-demo: #@ runs local files demo using gptscript
 .PHONY: run-tweets-workflow
 run-tweets-workflow: #@ runs tweets summarizer workflow using gptscript
 	@gptscript tools/social/tweets-workflow.gpt
+
+.PHONY: suggest-commands
+suggest-commands: #@ analyze repo state and suggest relevant commands to run
+	@gptscript tools/repo-analysis/repo-command-suggester.gpt
+
+.PHONY: demo-suggest-commands
+demo-suggest-commands: #@ demo the repo command suggester without requiring GPTScript
+	@./tools/repo-analysis/demo.sh
