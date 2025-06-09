@@ -7,8 +7,10 @@ A collection of GPTScript tools for various automation and data processing tasks
 ```
 gpt-script-tool/
 ├── tools/                          # Main GPTScript tools
-│   ├── cli/
-│   │   └── cli-demo.gpt            # GitHub CLI integration tool
+│   ├── github/
+│   │   ├── github.gpt              # GitHub CLI integration tool
+│   │   ├── git-commit.gpt          # Intelligent git commit message generator
+│   │   └── .gptgitcommitignore     # Git commit ignore patterns
 │   ├── data-processing/
 │   │   ├── local-files.gpt         # Data processing assistant
 │   │   └── context-tool.gpt        # Workspace context tool
@@ -27,16 +29,13 @@ gpt-script-tool/
 │   └── yoy_sales.xlsx
 ├── docs/                          # Documentation
 │   └── README.md                  # This file
-└── config/                        # Configuration files
-    ├── Makefile                   # Main build configuration
-    ├── .gitignore                 # Git ignore rules
-    └── .tool-versions             # Tool version specifications
 ```
 
 ## Available Tools
 
-### CLI Tools
-- **cli-demo.gpt**: GitHub CLI integration tool for repository management
+### GitHub Tools
+- **github.gpt**: GitHub CLI integration tool for repository management
+- **git-commit.gpt**: Intelligent git commit message generator with conventional commit format
 
 ### Data Processing Tools
 - **local-files.gpt**: Assistant for processing local data files (CSV, JSON, PDF, Excel)
@@ -85,7 +84,10 @@ gptscript tools/weather/weather-tool.gpt
 ### GitHub Operations
 ```bash
 # GitHub CLI operations
-gptscript tools/cli/cli-demo.gpt
+gptscript tools/github/github.gpt
+
+# Generate intelligent git commit messages
+gptscript tools/github/git-commit.gpt
 ```
 
 ### Tweet Summarization
@@ -109,7 +111,7 @@ To add new tools:
 
 ## Tool Categories
 
-- **CLI**: Command-line interface integrations
+- **GitHub**: Git and GitHub integrations
 - **Data Processing**: File and data manipulation tools
 - **Social**: Social media platform integrations
 - **Weather**: Weather and environmental data tools

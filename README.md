@@ -39,6 +39,7 @@ make help
 | Category | Tool | Description |
 |----------|------|-------------|
 | **Github** | github.gpt | GitHub CLI integration |
+| **Github** | git-commit.gpt | Intelligent git commit message generator |
 | **Data** | local-files.gpt | Process CSV, JSON, PDF, Excel files |
 | **Data** | context-tool.gpt | Workspace context provider |
 | **Social** | tweets-workflow.gpt | Twitter content summarization |
