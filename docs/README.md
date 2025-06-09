@@ -10,6 +10,7 @@ gpt-script-tool/
 │   ├── github/
 │   │   ├── github.gpt              # GitHub CLI integration tool
 │   │   ├── git-commit.gpt          # Intelligent git commit message generator
+│   │   ├── code-reviewer.gpt       # Automated code review tool
 │   │   └── .gptgitcommitignore     # Git commit ignore patterns
 │   ├── data-processing/
 │   │   ├── local-files.gpt         # Data processing assistant
@@ -36,6 +37,7 @@ gpt-script-tool/
 ### GitHub Tools
 - **github.gpt**: GitHub CLI integration tool for repository management
 - **git-commit.gpt**: Intelligent git commit message generator with conventional commit format
+- **code-reviewer.gpt**: Automated code review tool for GitHub pull requests
 
 ### Data Processing Tools
 - **local-files.gpt**: Assistant for processing local data files (CSV, JSON, PDF, Excel)
@@ -88,6 +90,9 @@ gptscript tools/github/github.gpt
 
 # Generate intelligent git commit messages
 gptscript tools/github/git-commit.gpt
+
+# Perform automated code review on GitHub PRs
+gptscript tools/github/code-reviewer.gpt --PR_URL "https://github.com/owner/repo/pull/123"
 ```
 
 ### Tweet Summarization

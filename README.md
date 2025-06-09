@@ -40,6 +40,7 @@ make help
 |----------|------|-------------|
 | **Github** | github.gpt | GitHub CLI integration |
 | **Github** | git-commit.gpt | Intelligent git commit message generator |
+| **Github** | code-reviewer.gpt | Automated code review for GitHub PRs |
 | **Data** | local-files.gpt | Process CSV, JSON, PDF, Excel files |
 | **Data** | context-tool.gpt | Workspace context provider |
 | **Social** | tweets-workflow.gpt | Twitter content summarization |
