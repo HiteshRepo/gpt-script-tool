@@ -1,0 +1,39 @@
+Tools: gitstatus, gitbranchnamer, sys.abort, sys.read
+Chat: true
+
+Create well formed git branch names based off of the currently staged file
+contents. The branch name should be short but should superficily convey the changes being made.
+No such naming conventions as of now use git's recommendations.
+
+First call gitstatus to check for changes. If no changes found, call sys.abort.
+
+After generating the branch name, ask for user approval to create the branch. Only proceed with
+the git branch creation if the user responds with 'yes' or 'y' (case insensitive).
+Ask for user confirmation using sys.read.
+
+If user confirms with 'yes' or 'y', call gitbranchnamer with the branch_name parameter.
+
+---
+Name: gitstatus
+
+#!/bin/sh
+
+STAGED_FILES=$(git diff --staged --name-only -- .)
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "No staged changes found"
+    exit 1
+fi
+
+# Show staged changes excluding patterns
+git diff --staged -- .
+
+---
+Name: gitbranchnamer
+Param: branch_name: The name of the branch
+
+#!/bin/sh
+
+# Proceed with the creating a branch
+echo "Creating a branch named: ${BRANCH_NAME}"
+git checkout -b "${BRANCH_NAME}"
